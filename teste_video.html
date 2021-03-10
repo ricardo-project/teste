@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Teste de Vídeo</title>
+    <meta charset=UTF-8>
+  </head>
+  <body>
+    <style>
+      html, body {
+        height: 100%;
+      } body {
+        margin: 0px;
+        font-family: Roboto;
+        color: white;
+        user-select: none
+      } header {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(rgb(0,0,0,0.5), rgb(0,0,0,0.9));
+        position: fixed;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      } header > p {
+        cursor: pointer;
+        position: absolute;
+        z-index: 1;
+        top: 20px;
+        right: 20px;
+       padding: 10px;
+       color: rgb(255, 251, 0);
+       border: 1px solid rgb(255, 251, 0);
+        transition: all 0.2s ease;
+       
+      } header > p:hover {
+    background-color: rgb(3, 18, 68);
+    color: #fff;
+    border: 1px solid rgb(0, 204, 255);
+      } main {
+        background: rgb(120,120,120)
+      } section:nth-child(1) {
+        text-align: center;
+        
+        height: 800px;
+        font-size: 130px;
+        font-weight: bold
+      } article {
+        overflow: hidden;
+        display: -webkit-box;
+        background: rgb(70,70,70);
+        width: calc(100% - 200px);
+        height: 100px;
+        margin: 50px 100px;
+        font-size: 50px;
+        border-radius: 50px;
+        box-shadow: rgb(40,40,40) 5px 5px 0px;
+      } article > p {
+        margin: auto;
+        width: max-content
+      } section:nth-child(1) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      } div {
+        width: 1px;
+        height: 1px
+      } header > iframe {
+        border-radius: 20px;
+        background: black;
+        box-shadow: rgb(90,90,90,0.5) 5px 5px 0px;
+        transition: box-shadow 0.3s ease, transform 0.2s ease
+      } header > iframe:hover {
+        box-shadow: rgb(150,150,150) 5px 5px 20px
+      }
+    </style>
+    <header>
+      <p id="fechar">X</p>
+    </header>
+    <main>
+  
+      <section>
+        
+      </section>
+    </main>
+  </body>
+  <script>
+    const pi = Math.PI //---> Constante de Arquimedes (Pi), razão do perímetro pelo diâmetro de uma circunferência
+    let set
+    const quantSet = 100
+    let numSet = quantSet
+    let header = document.querySelector("header")
+    let imgH = header.querySelector("p")
+    let maxWYT = 720
+    let maxHYT = 540
+    let angle = 0
+    let condIframe = false
+    let iframe
+    let IDYT = "nUPubUO4Qgw" //---> Aqui tu coloca o ID do YouTube!
+    let numScroll = 1 - Math.pow(0, window.scrollY)
+    let scrollVid = function() {
+      if(numScroll == 0) {
+        window.removeEventListener("scroll", scrollVid)
+        iframe = document.createElement("iframe")
+        iframe.src = "http://www.youtube.com/embed/" + IDYT + "?autoplay=1"
+        iframe.width = maxWYT
+        iframe.height = maxHYT
+        iframe.style.width = maxWYT
+        iframe.style.height = maxHYT
+        iframe.frameBorder = 0
+        iframe.allowFullscreen = true
+        header.appendChild(iframe)
+        redimensIFrame()
+        window.addEventListener("resize", redimensIFrame)
+        functTransition(-1, () => {})
+      } numScroll--
+    }; let closeHeader = function() {
+      imgH.removeEventListener("click", closeHeader)
+      functTransition(1, () => {
+        window.removeEventListener("resize", redimensIFrame)
+        document.body.removeChild(header)
+      })
+    }; let redimensIFrame = function() {
+      let Wu = window.innerWidth - 77
+      let Hu = window.innerHeight - 60
+      if(Wu >= maxWYT && Hu >= maxHYT) {
+        iframe.style.transform = "scale(1)"
+      } else {
+        let vT
+        if(Wu/maxWYT >= Hu/maxHYT) {
+          vT = Hu/maxHYT
+        } else {
+          vT = Wu/maxWYT
+        } if(vT < 0.3) {
+          vT = 0.3
+        } iframe.style.transform = "scale(" + vT + ")"
+      }
+    }; function functTransition(numAdd, functSet) {
+      set = setInterval(function() {
+        numSet += numAdd
+        if(numSet == 0) {
+          clearInterval(set)
+          imgH.addEventListener("click", closeHeader)
+        } else if(numAdd == -1 && numSet == quantSet - 1) {
+          header.style.display = "flex"
+        } else if(numSet == quantSet) {
+          clearInterval(set)
+          functSet()
+          return
+        } header.style.right = window.innerWidth*(1 - Math.cos(Math.PI*numSet/(quantSet*2))) + "px"
+      }, 10)
+    } window.addEventListener("scroll", scrollVid)
+  </script>
+</html>
